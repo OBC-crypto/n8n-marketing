@@ -111,11 +111,7 @@ services:
       - N8N_PROTOCOL=https
       - WEBHOOK_URL=https://n8n.obc-crypto.com
       - N8N_EDITOR_BASE_URL=https://n8n.obc-crypto.com
-      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
-      - N8N_SECURE_COOKIE=true
-      - N8N_RUNNERS_ENABLED=true
-      - N8N_PROXY_HOPS=2
-      - DB_SQLITE_POOL_SIZE=5
+      - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
     volumes:
       - ./n8n_data:/home/node/.n8n
 
