@@ -99,9 +99,7 @@ USER root
 RUN apk add --no-cache \
     ffmpeg \
     python3 \
-    py3-pip
-
-RUN pip3 install --no-cache-dir yt-dlp
+    yt-dlp
 
 RUN mkdir -p /home/node/.n8n/download && \
     chown -R node:node /home/node/.n8n
