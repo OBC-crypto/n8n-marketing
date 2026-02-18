@@ -86,6 +86,34 @@ docker tag n8nio/n8n:latest custom-n8n:latest
 
 echo "✅ Image berhasil diload & ditag."
 
+echo ""
+echo "==============================="
+echo "🔧  BUILDING EXTENDED N8N IMAGE (FFMPEG + YT-DLP)"
+echo "==============================="
+
+cat > Dockerfile.extend <<'EOF'
+FROM custom-n8n:latest
+
+USER root
+
+RUN apk add --no-cache \
+    ffmpeg \
+    python3 \
+    py3-pip
+
+RUN pip3 install --no-cache-dir yt-dlp
+
+RUN mkdir -p /home/node/.n8n/download && \
+    chown -R node:node /home/node/.n8n
+
+USER node
+EOF
+
+docker build -f Dockerfile.extend -t custom-n8n:ffmpeg .
+
+echo "✅ Extended image built: custom-n8n:ffmpeg"
+
+
 # ========================
 # MEMBUAT DOCKER-COMPOSE
 # ========================
@@ -99,7 +127,7 @@ version: "3.8"
 
 services:
   n8n:
-    image: custom-n8n:latest
+    image: custom-n8n:ffmpeg
     container_name: n8n
     restart: always
     networks:
@@ -107,13 +135,16 @@ services:
     ports:
       - "5678:5678"
     environment:
-      - N8N_HOST=n8n.obc-crypto.com
+      - N8N_HOST=n8n.delitourandphotography.com
       - N8N_PROTOCOL=https
-      - WEBHOOK_URL=https://n8n.obc-crypto.com
-      - N8N_EDITOR_BASE_URL=https://n8n.obc-crypto.com
+      - WEBHOOK_URL=https://n8n.delitourandphotography.com
+      - N8N_EDITOR_BASE_URL=https://n8n.delitourandphotography.com
       - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+      - NODE_ENV=production
     volumes:
       - ./n8n_data:/home/node/.n8n
+    mem_limit: 1g
+    cpus: 1.5
 
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -122,8 +153,7 @@ services:
     networks:
       - n8n_net
     command: >
-      tunnel --no-autoupdate run --token
-      XXX
+      tunnel --no-autoupdate run --token xx
 
 networks:
   n8n_net:
