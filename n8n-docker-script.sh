@@ -139,6 +139,7 @@ services:
       - N8N_EDITOR_BASE_URL=https://n8n.delitourandphotography.com
       - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
       - NODE_ENV=production
+      - EXECUTIONS_PROCESS=main
     volumes:
       - ./n8n_data:/home/node/.n8n
     mem_limit: 1g
