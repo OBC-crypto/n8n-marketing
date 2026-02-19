@@ -78,6 +78,12 @@ if [ ! -f "$IMAGE_FILE" ]; then
 fi
 
 mkdir n8n_data
+mkdir -p vendor
+
+curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp \
+-o vendor/yt-dlp
+
+chmod +x vendor/yt-dlp
 
 docker load -i "$IMAGE_FILE"
 
@@ -98,8 +104,9 @@ USER root
 
 RUN apk add --no-cache \
     ffmpeg \
-    python3 \
-    yt-dlp
+    python3
+
+COPY vendor/yt-dlp /usr/local/bin/yt-dlp
 
 RUN mkdir -p /home/node/.n8n/download && \
     chown -R node:node /home/node/.n8n
