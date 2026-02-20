@@ -184,5 +184,8 @@ if [ $? -eq 0 ]; then
 else
     echo "❌ Deploy gagal!"
 fi
+sudo rm -r n8n.tar
+sudo rm -r n8n-docker-script.sh
+sudo rm -r token.json
 
 ping 8.8.8.8
